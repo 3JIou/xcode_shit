@@ -150,6 +150,5 @@ class XCODE_API_MODULE(object):
 
 
 if __name__ == '__main__':
-    f = XCODE_API_MODULE(host='10.10.253.3')
-    a = f.get_assets(path='079960823be25a5a83d868a21c00eea9-ios_bot/15/Screenshot_220FAFD9-EBFC-4BFE-84D4-10618997F9D1.jpg')
-    print a
+    f = XCODE_API_MODULE(host='')
+
