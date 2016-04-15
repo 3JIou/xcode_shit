@@ -15,7 +15,7 @@ def get_pycurl(url, request_type=None, data=None):
     :param url: as string. Full URL for request
     :param request_type: as string. Type of request
     :param data: as string. Body for POST and PATCH request
-    :return: as dict (or int in case of status_code). Result of request
+    :return: as list (or int in case of status_code). Result of request
     """
     headers = {"Content-Type": "application/json"}
     if request_type is None or request_type == 'GET':
@@ -42,28 +42,28 @@ class XCODE_API_MODULE(object):
     def __init__(self, **kwargs):
         """
         Initial module of class
-        :param kwargs: as dict. Some parameters for initialization
+        :param kwargs: as list. Some parameters for initialization
         """
         self.host = kwargs['host']
 
     def get_all_bots(self):
         """
         GET request for getting all bots from xcode server
-        :return: as dict or int. Result of request
+        :return: as list or int. Result of request
         """
         try:
             result = get_pycurl('https://' + self.host + ':20343/api/bots')
         except Exception as err_mgs:
             print err_mgs
             sys.exit(1)
-        return result if result is dict else result.status_code
+        return result.json()[u'results'] if result.ok else result.status_code
 
     def post_duplicate_bot(self, bot_id, body):
         """
         POST request for duplicate bot with some changes
         :param bot_id: as string. Bot for duplicate
         :param body: as string. Some body with changes (like json)
-        :return: as dict or int. Result of request
+        :return: as list or int. Result of request
         """
         try:
             result = get_pycurl('https://' + self.host + ':20343/api/bots/' + bot_id + '/duplicate',
@@ -71,14 +71,14 @@ class XCODE_API_MODULE(object):
         except Exception as err_msg:
             print err_msg
             sys.exit(1)
-        return result if result is dict else result.status_code
+        return result.json()[u'results'] if result.ok else result.status_code
 
     def patch_update_bot(self, bot_id, body):
         """
         PATCH request for update single bot.
         :param bot_id: as string. Bot for updating
         :param body: as string. Some body with change (like json)
-        :return: as dict or int. Result of request
+        :return: as list or int. Result of request
         """
         try:
             result = get_pycurl('https://' + self.host + ':20343/api/bots' + bot_id, request_type='PATCH',
@@ -86,13 +86,13 @@ class XCODE_API_MODULE(object):
         except Exception as err_msg:
             print err_msg
             sys.exit(1)
-        return result if result is dict else result.status_code
+        return result.json()[u'results'] if result.ok else result.status_code
 
     def delete_bot(self, bot_id):
         """
         DELETE request for remove single bot
         :param bot_id: as string. Bot for delete
-        :return: as dict or int. Result of request
+        :return: as list or int. Result of request
         """
         try:
             result = get_pycurl('https://' + self.host + ':20343/api/bots/' + bot_id, request_type='DELETE')
@@ -106,7 +106,7 @@ class XCODE_API_MODULE(object):
         POST request for create integration
         :param bot_id: as string. Bot on which to will be created integration
         :param body: as string. Some body with integration model (like json)
-        :return: as dict or int. Result of request
+        :return: as list or int. Result of request
         """
         try:
             result = get_pycurl('https://' + self.host + ':20343/api/bots/' + bot_id + '/integrations',
@@ -114,26 +114,26 @@ class XCODE_API_MODULE(object):
         except Exception as err_msg:
             print err_msg
             sys.exit(1)
-        return result if result is dict else result.status_code
+        return result.json()[u'results'] if result.ok else result.status_code
 
     def get_retrieving_integration(self, integration_id):
         """
         GET request for retrieving single integration
         :param integration_id: as string. Integration id
-        :return: as dict or int. Result of request
+        :return: as list or int. Result of request
         """
         try:
             result = get_pycurl('https://' + self.host + ':20343/api/integrations/' + integration_id)
         except Exception as err_msg:
             print err_msg
             sys.exit(1)
-        return result if result is dict else result.status_code
+        return result.json()[u'results'] if result.ok else result.status_code
 
     def delete_integration(self, integration_id):
         """
         DELETE request for remove single integration
         :param integration_id: as string. Integration id
-        :return: as dict or int. Result of request
+        :return: as list or int. Result of request
         """
         try:
             result = get_pycurl('https://' + self.host + ':20343/api/integrations/' + integration_id,
@@ -141,13 +141,13 @@ class XCODE_API_MODULE(object):
         except Exception as err_msg:
             print err_msg
             sys.exit(1)
-        return result if result is dict else result.status_code
+        return result.json()[u'results'] if result.ok else result.status_code
 
     def post_canceling_integration(self, integration_id):
         """
         POST request for canceling single integration
         :param integration_id: as string. Integration id
-        :return: as dict or int. Result of request
+        :return: as list or int. Result of request
         """
         try:
             result = get_pycurl('https://' + self.host + ':20343/api/integrations/' + integration_id + '/cancel',
@@ -155,7 +155,7 @@ class XCODE_API_MODULE(object):
         except Exception as err_msg:
             print err_msg
             sys.exit(1)
-        return result if result is dict else result.status_code
+        return result.json()[u'results'] if result.ok else result.status_code
 
     def get_filtering_integration_for_current_bot(self, bot_id, integration_filter, type_integration_filter):
         """
@@ -168,7 +168,7 @@ class XCODE_API_MODULE(object):
                                         non_fatal: Integrations with a result of type succeeded, test-failures,
                                                    build-errors, warnings, analyzer-warnings or build-failed.
                                         with_build_results: Integrations containing build summary information.
-        :return: as dict or int. Result of request
+        :return: as list or int. Result of request
         """
         try:
             result = get_pycurl(
@@ -177,7 +177,7 @@ class XCODE_API_MODULE(object):
         except Exception as err_msg:
             print err_msg
             sys.exit(1)
-        return result if result is dict else result.status_code
+        return result.json()[u'results'] if result.ok else result.status_code
 
     def get_filtering_integration_for_all_bots(self, integration_filter, type_integration_filter):
         """
@@ -189,7 +189,7 @@ class XCODE_API_MODULE(object):
                                         non_fatal: Integrations with a result of type succeeded, test-failures,
                                                    build-errors, warnings, analyzer-warnings or build-failed.
                                         with_build_results: Integrations containing build summary information.
-        :return: as dict or int. Result of request
+        :return: as list or int. Result of request
         """
         try:
             result = get_pycurl(
@@ -198,26 +198,26 @@ class XCODE_API_MODULE(object):
         except Exception as err_msg:
             print err_msg
             sys.exit(1)
-        return result if result is dict else result.status_code
+        return result.json()[u'results'] if result.ok else result.status_code
 
     def get_retrieving_files_for_integration(self, integration_id):
         """
         GET request for retrieving files of single integration
         :param integration_id: as string. Integration id
-        :return: as dict or int. Result of request
+        :return: as list or int. Result of request
         """
         try:
             result = get_pycurl('https://' + self.host + ':20343/api/integrations/' + integration_id + '/files')
         except Exception as err_msg:
             print err_msg
             sys.exit(1)
-        return result if result is dict else result.status_code
+        return result.json()[u'results'] if result.ok else result.status_code
 
     def get_assets(self, path):
         """
         GET request for getting all assets at the specified path
         :param path: as string. Path for getting assets
-        :return: as dict or int. Result of request
+        :return: as list or int. Result of request
         """
         try:
             result = get_pycurl('https://' + self.host + ':20343/api/assets/' + path)
@@ -225,12 +225,12 @@ class XCODE_API_MODULE(object):
             print err_msg
             sys.exit(1)
         if result.ok:
-            result_dict = {
+            result_list = {
                 'content': result.content,
                 'url': result.url,
                 'links': result.links,
             }
-            return result_dict
+            return result_list
         else:
             return result.status_code
 
