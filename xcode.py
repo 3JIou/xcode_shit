@@ -236,4 +236,4 @@ class XCODE_API_MODULE(object):
 
 
 if __name__ == '__main__':
-    f = XCODE_API_MODULE(host='')
+    test = XCODE_API_MODULE(host='')
